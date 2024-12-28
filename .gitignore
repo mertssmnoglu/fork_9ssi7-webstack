@@ -1,0 +1,4 @@
+*_templ.go
+node_modules
+dist
+tmp
