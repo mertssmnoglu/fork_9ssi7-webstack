@@ -19,10 +19,7 @@ func New() server.Rest {
 
 func (s *srv) Register(app *fiber.App) {
 	app.Get("/admin*", static.New("", static.Config{
-		FS:            distFS,
-		Browse:        true,
-		IndexNames:    []string{"dist/index.html"},
-		CacheDuration: 0,
-		MaxAge:        0,
+		FS:         distFS,
+		IndexNames: []string{"dist/index.html"},
 	}))
 }

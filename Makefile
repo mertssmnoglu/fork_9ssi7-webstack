@@ -1,4 +1,4 @@
-.PHONY: build run dev clean js-build js-watch templ
+.PHONY: build run dev clean js-build js-watch templ compose
 
 # Go commands
 build:
@@ -26,3 +26,6 @@ setup:
 
 test:
 	go test ./...
+
+compose:
+	docker compose -f compose.dev.yml up --build

@@ -1,9 +1,18 @@
-### Node Stage
-FROM node:20.11.1-slim AS node_builder
+FROM node:20.11.1-slim AS web_builder
 
 WORKDIR /
 
 COPY ./api/web ./
+
+RUN npm install
+
+RUN npm run build
+
+FROM node:20.11.1-slim AS admin_builder
+
+WORKDIR /
+
+COPY ./api/admin ./
 
 RUN npm install
 
@@ -22,7 +31,9 @@ RUN   --mount=type=cache,target=/go/pkg/mod \
 COPY . .
 
 # install templ
-RUN go install github.com/a-h/templ/cmd/templ@latest
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    go install github.com/a-h/templ/cmd/templ@latest
 
 RUN templ generate ./api/web/templates/
 
@@ -39,8 +50,9 @@ ENV RPC_PORT=9090
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /main .
-COPY --from=node_builder /static/dist /api/web/static/dist
-COPY --from=node_builder /templates /api/web/templates
+COPY --from=web_builder /static/dist /api/web/static/dist
+COPY --from=web_builder /templates /api/web/templates
+COPY --from=admin_builder /dist /api/admin/dist
 EXPOSE $HTTP_PORT $RPC_PORT
 
 CMD ["/main"]

@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      - APP_ENV=development
+      - HTTP_PORT=8080
+      - RPC_PORT=9090
+    networks:
+      - webstack-network
+    volumes:
+      - ./:/app
+
+  web-watcher:
+    image: node:20.11.1-slim
+    working_dir: /app/api/web
+    command: npm run watch
+    volumes:
+      - ./:/app
+    networks:
+      - webstack-network
+
+  admin-watcher:
+    image: node:20.11.1-slim
+    working_dir: /app/api/admin
+    command: npm run watch
+    volumes:
+      - ./:/app
+    networks:
+      - webstack-network
+
+networks:
+  webstack-network:
+    driver: bridge
