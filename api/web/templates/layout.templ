@@ -7,7 +7,7 @@ templ Layout(title string) {
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>{title}</title>
-			<link href="/static/style.css" rel="stylesheet"/>
+			<link href="/static/dist/style.css" rel="stylesheet"/>
 			<script src="https://unpkg.com/htmx.org@1.9.6"></script>
 			<script src="https://unpkg.com/petite-vue"></script>
 		</head>
@@ -21,7 +21,7 @@ templ Layout(title string) {
 			<div class="container mx-auto px-4">
 				{ children... }
 			</div>
-			<script src="/static/bundle.min.js"></script>
+			<script src="/static/dist/bundle.min.js"></script>
 		</body>
 	</html>
 }

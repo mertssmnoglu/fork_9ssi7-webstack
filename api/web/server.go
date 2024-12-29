@@ -1,11 +1,17 @@
 package web
 
 import (
+	"embed"
+
 	"github.com/9ssi7/webstack/api/web/templates"
 	"github.com/9ssi7/webstack/internal/models"
 	"github.com/9ssi7/webstack/pkg/server"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/static"
 )
+
+//go:embed all:static/*
+var staticFS embed.FS
 
 type srv struct {
 }
@@ -15,20 +21,22 @@ func New() server.Rest {
 }
 
 func (s *srv) Register(app *fiber.App) {
-	app.Static("/static", "./api/web/static/dist") // Changed to use working directory path
+	app.Get("/static*", static.New("./api/web/static/", static.Config{
+		FS: staticFS,
+	}))
 
 	// Register Web Routes
 	app.Get("/", s.HandleHome)
 	app.Get("/dashboard", s.HandleDashboard)
 }
 
-func (s *srv) HandleHome(c *fiber.Ctx) error {
+func (s *srv) HandleHome(c fiber.Ctx) error {
 	c.Set("Content-Type", "text/html")
 	component := templates.Home()
 	return component.Render(c.Context(), c.Response().BodyWriter())
 }
 
-func (s *srv) HandleDashboard(c *fiber.Ctx) error {
+func (s *srv) HandleDashboard(c fiber.Ctx) error {
 	c.Set("Content-Type", "text/html")
 	accountData := getDummyAccount()
 	component := templates.Dashboard(accountData)

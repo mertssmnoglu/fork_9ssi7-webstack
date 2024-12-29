@@ -4,7 +4,7 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type Rest interface {

@@ -4,6 +4,7 @@ import (
 	"log"
 	"sync"
 
+	"github.com/9ssi7/webstack/api/admin"
 	"github.com/9ssi7/webstack/api/rest"
 	"github.com/9ssi7/webstack/api/rpc"
 	"github.com/9ssi7/webstack/api/web"
@@ -14,7 +15,7 @@ func main() {
 	http := server.NewXHTTP(server.XHTTPConfig{
 		Host: "0.0.0.0",
 		Port: 8080,
-	}, rest.New(), web.New())
+	}, rest.New(), web.New(), admin.New())
 
 	// Create RPC server
 	rpcServer := rpc.NewServer()

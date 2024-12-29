@@ -3,7 +3,7 @@ package rest
 import (
 	"github.com/9ssi7/webstack/internal/models"
 	"github.com/9ssi7/webstack/pkg/server"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 type srv struct {
@@ -19,12 +19,12 @@ func (s *srv) Register(app *fiber.App) {
 	api.Get("/transactions", s.GetTransactions)
 }
 
-func (s *srv) GetAccounts(c *fiber.Ctx) error {
+func (s *srv) GetAccounts(c fiber.Ctx) error {
 	account := getDummyAccount()
 	return c.JSON(account)
 }
 
-func (s *srv) GetTransactions(c *fiber.Ctx) error {
+func (s *srv) GetTransactions(c fiber.Ctx) error {
 	transactions := getDummyTransactions()
 	return c.JSON(transactions)
 }
